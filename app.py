@@ -58,11 +58,7 @@ class MovieView(Resource):
         return "Нет такого фильма", 404
 
     def patch(self, movie_id: int):
-        movie = db.session.query(models.Movie.id, models.Movie.title, models.Movie.description,
-                                 models.Movie.rating, models.Movie.trailer, models.Genre.name.label('genre'),
-                                 models.Director.name.label('director')).join(models.Genre).join(
-            models.Director).filter(
-            models.Movie.id == movie_id).first()
+        movie = db.session.query(models.Movie).get(movie_id)
         req_json = request.json
         if 'title' in req_json:
             movie.title = req_json['title']
@@ -83,11 +79,7 @@ class MovieView(Resource):
         return f"Объект с id {movie_id} обновлен!", 204
 
     def put(self, movie_id):
-        movie = db.session.query(models.Movie.id, models.Movie.title, models.Movie.description,
-                                 models.Movie.rating, models.Movie.trailer, models.Genre.name.label('genre'),
-                                 models.Director.name.label('director')).join(models.Genre).join(
-            models.Director).filter(
-            models.Movie.id == movie_id).first()
+        movie = db.session.query(models.Movie).get(movie_id)
         if not movie:
             return "Нет такого фильма", 404
         req_json = request.json
